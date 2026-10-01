@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leon Festinger: O Arquitecto da Dissonância Cognitiva | Documentário Interativo</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Lora', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        sand: {
+                            50: '#fdfbf7',
+                            100: '#f8f4ec',
+                            200: '#eee5d5',
+                            300: '#e1d0b5',
+                            800: '#43382c',
+                            900: '#272018',
+                        },
+                        terracotta: {
+                            600: '#c2410c',
+                            700: '#9a3412',
+                        },
+                        sage: {
+                            700: '#2e5a44',
+                            800: '#1e3d2e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chosen Palette: Warm Neutrals & Sage Harmony (Background: Warm Sand #fdfbf7, Text: Deep Charcoal #272018, Accents: Terracotta #c2410c and Sage Green #2e5a44) -->
+    <!-- Application Structure Plan: Designed as a 5-Act Interactive Multimedia Documentary SPA with an integrated Empirical Laboratory. Act 1 covers origins, Lewinian statistics, and Westgate Propinquity; Act 2 explores Social Comparison & the Keech apocalypse infiltration; Act 3 details Cognitive Dissonance mechanics and the iconic $1 vs $20 experiment simulator; Act 4 presents fMRI neurobiology and modern applications (Algorithms, Economics, Climate Inaction); Act 5 examines his radical exit to oculomotor vision and "The Human Legacy". Features tabbed act navigation, real-time Dissonance formula calculators, Chart.js dynamic data charts, interactive experiment simulators, and concept search. -->
+    <!-- Visualization & Content Choices: 
+         1. Westgate Propinquity Matrix -> Goal: Compare physical vs functional distance -> Method: Interactive HTML/Tailwind spatial grid with metric toggles -> Justification: Clear spatial explanation without SVG.
+         2. Induction Compliance ($1 vs $20) -> Goal: Compare hedonic evaluation ratings -> Method: Chart.js Canvas Bar Chart -> Justification: Highly responsive dynamic bar plot.
+         3. Dissonance Formula Calculator -> Goal: Demonstrate Dissonance Magnitude formula -> Method: Interactive JS slider and realtime mathematical output bar -> Justification: Immediate user manipulation of tension variables.
+         4. Brain fMRI Hotspot Inspector -> Goal: Visualize dACC and Anterior Insula activation -> Method: Styled HTML/CSS brain layout with hotspot tooltips -> Justification: Clean SVG-free neural visualization.
+         Confirming NO SVG graphics and NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f8f4ec;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-sand-50 text-sand-900 font-sans antialiased selection:bg-terracotta-600 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-sand-50/95 backdrop-blur border-b border-sand-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl font-serif font-bold text-terracotta-600">LF</span>
+                    <div>
+                        <h1 class="text-base font-serif font-bold leading-none text-sand-900">Leon Festinger</h1>
+                        <p class="text-xs text-stone-500 font-medium">O Arquitecto da Dissonância Cognitiva</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="hidden lg:flex items-center space-x-1 text-sm font-medium">
+                    <button onclick="switchTab('ato1')" id="nav-ato1" class="nav-btn px-3 py-2 rounded-md transition-colors text-terracotta-600 bg-sand-200/60 font-semibold">Ato I: Origens & Espaço</button>
+                    <button onclick="switchTab('ato2')" id="nav-ato2" class="nav-btn px-3 py-2 rounded-md transition-colors text-stone-600 hover:text-sand-900 hover:bg-sand-100">Ato II: Comparação & Fé</button>
+                    <button onclick="switchTab('ato3')" id="nav-ato3" class="nav-btn px-3 py-2 rounded-md transition-colors text-stone-600 hover:text-sand-900 hover:bg-sand-100">Ato III: A Dissonância ($1 vs $20)</button>
+                    <button onclick="switchTab('ato4')" id="nav-ato4" class="nav-btn px-3 py-2 rounded-md transition-colors text-stone-600 hover:text-sand-900 hover:bg-sand-100">Ato IV: Neurobiologia & Hoje</button>
+                    <button onclick="switchTab('ato5')" id="nav-ato5" class="nav-btn px-3 py-2 rounded-md transition-colors text-stone-600 hover:text-sand-900 hover:bg-sand-100">Ato V: O Êxodo & Legado</button>
+                    <button onclick="switchTab('lab')" id="nav-lab" class="nav-btn px-3 py-2 rounded-md transition-colors text-sage-700 bg-emerald-100/60 hover:bg-emerald-200 font-semibold ml-2">🔬 Laboratório Interativo</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex lg:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-stone-700 hover:text-sand-900 p-2 font-bold text-lg">
+                        ☰
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-sand-100 border-b border-sand-200 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('ato1'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-sm font-medium text-sand-900 hover:bg-sand-200 rounded">Ato I: Origens & Espaço</button>
+            <button onclick="switchTab('ato2'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-sm font-medium text-sand-900 hover:bg-sand-200 rounded">Ato II: Comparação & Fé</button>
+            <button onclick="switchTab('ato3'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-sm font-medium text-sand-900 hover:bg-sand-200 rounded">Ato III: A Dissonância ($1 vs $20)</button>
+            <button onclick="switchTab('ato4'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-sm font-medium text-sand-900 hover:bg-sand-200 rounded">Ato IV: Neurobiologia & Hoje</button>
+            <button onclick="switchTab('ato5'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-sm font-medium text-sand-900 hover:bg-sand-200 rounded">Ato V: O Êxodo & Legado</button>
+            <button onclick="switchTab('lab'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-sm font-semibold text-sage-700 bg-emerald-100 rounded">🔬 Laboratório Interativo</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Documentary Hero Banner -->
+        <section class="bg-gradient-to-br from-sand-900 via-stone-900 to-sage-800 text-white rounded-2xl p-6 sm:p-10 mb-10 shadow-xl relative overflow-hidden">
+            <div class="relative z-10 max-w-3xl">
+                <span class="inline-block px-3 py-1 bg-terracotta-600 text-white text-xs font-semibold uppercase tracking-wider rounded-full mb-4">
+                    Documentário Biográfico e Investigativo Interativo
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-serif font-bold tracking-tight mb-4 leading-tight">
+                    Da Dissonância Cognitiva à Evolução da Natureza Humana
+                </h2>
+                <p class="text-sand-200 text-base sm:text-lg leading-relaxed mb-6 font-light">
+                    "O ser humano não é um animal racional, mas sim um <strong class="text-white font-semibold">animal racionalizador</strong>, impulsionado de forma inata por um desejo inexorável de manter a consistência interna das suas perceções."
+                </p>
+                
+                <!-- Dynamic Quick Stats -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-stone-700 text-center sm:text-left">
+                    <div>
+                        <div class="text-2xl font-bold font-serif text-terracotta-600">1919–1989</div>
+                        <div class="text-xs text-stone-400">Vida & Trajectória</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-serif text-amber-400">2 Grandes Teorias</div>
+                        <div class="text-xs text-stone-400">Comparação Social & Dissonância</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-serif text-emerald-400">1959</div>
+                        <div class="text-xs text-stone-400">Estudo Clássico dos $1 vs $20</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-serif text-stone-200">5 Atos</div>
+                        <div class="text-xs text-stone-400">Exploração Multimédia Interativa</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl font-serif font-bold pointer-events-none select-none">
+                1957
+            </div>
+        </section>
+
+        <!-- Search / Quick Concept Filter Bar -->
+        <div class="bg-white rounded-xl shadow-sm border border-sand-200 p-4 mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-xs font-semibold text-stone-500 uppercase tracking-wider">
+                Explorar Conceitos Chave:
+            </div>
+            <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                <button onclick="quickSearch('propinquidade')" class="px-3 py-1 text-xs bg-sand-100 hover:bg-sand-200 text-sand-800 rounded-full transition">Efeito de Propinquidade</button>
+                <button onclick="quickSearch('comparacao')" class="px-3 py-1 text-xs bg-sand-100 hover:bg-sand-200 text-sand-800 rounded-full transition">Comparação Social</button>
+                <button onclick="quickSearch('clarion')" class="px-3 py-1 text-xs bg-sand-100 hover:bg-sand-200 text-sand-800 rounded-full transition">Culto Apocalíptico (Clarion)</button>
+                <button onclick="quickSearch('submissao')" class="px-3 py-1 text-xs bg-sand-100 hover:bg-sand-200 text-sand-800 rounded-full transition">Experimento $1 vs $20</button>
+                <button onclick="quickSearch('fmri')" class="px-3 py-1 text-xs bg-sand-100 hover:bg-sand-200 text-sand-800 rounded-full transition">Resposta Neural (dACC)</button>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT SECTION -->
+        <div id="tab-container">
+
+            <!-- ========================================== -->
+            <!-- ATO 1: ORIGENS, LEWIN & ESTUDO WESTGATE   -->
+            <!-- ========================================== -->
+            <section id="ato1" class="tab-content space-y-8">
+                <!-- Section Introduction Paragraph -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-terracotta-600">
+                    <h3 class="text-xl font-serif font-bold text-sand-900 mb-2">Ato I: A Matriz Metodológica e a Ecologia do Espaço (1919–1950)</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        Este primeiro ato examina a formação intelectual de Leon Festinger, desde as suas raízes familiares no Brooklyn até ao seu trabalho no lendário <em>Research Center for Group Dynamics</em> do MIT. Aqui explora-se a forma como a estatística matemática, a influência de Kurt Lewin e o estudo pioneiro das habitações universitárias em Westgate West transformaram a psicologia social, revelando que a arquitetura do espaço e a "propinquidade" moldam fundamentalmente as conexões humanas e a coesão ideológica.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Biography & Context -->
+                    <div class="lg:col-span-7 bg-white rounded-xl p-6 shadow-sm border border-sand-200 space-y-4">
+                        <span class="text-xs font-semibold text-terracotta-600 tracking-wider uppercase">1919–1945 • O Jovem Estatístico</span>
+                        <h4 class="text-2xl font-serif font-bold text-sand-900">Do Brooklyn a Iowa: O "Evasor" do Behaviorismo Mecanicista</h4>
+                        <p class="text-stone-700 text-sm leading-relaxed">
+                            Leon Festinger nasceu a 8 de maio de 1919 no Brooklyn, filho de imigrantes judeus-russos. O seu pai, um radical e ateu convicto, e a sua mãe autodidata incutiram-lhe um rigor intelectual singular e uma paixão pelo xadrez e pela lógica pura. Matriculou-se no CCNY em 1939 e seguiu para a Universidade de Iowa para trabalhar com <strong>Kurt Lewin</strong>.
+                        </p>
+                        <p class="text-stone-700 text-sm leading-relaxed">
+                            Apesar de ser hoje considerado o pai da psicologia social experimental moderna, Festinger ironizava frequentemente que <em>"nunca tinha frequentado um único curso de psicologia social"</em>. O seu doutoramento em 1942 foi formalmente em psicologia infantil, levando-o a gracejar: <em>"Tecnicamente o meu doutoramento é em psicologia infantil — embora eu nunca tenha visto uma criança."</em>
+                        </p>
+                        <div class="bg-sand-100 p-4 rounded-lg border-l-2 border-stone-400 text-xs text-stone-700 italic">
+                            Durante a Segunda Guerra Mundial (1943–1945), evitou o recrutamento ativo servindo como estatístico sénior no Comité de Seleção e Treino de Pilotos em Rochester, aplicando a estatística matemática a populações assimétricas.
+                        </div>
+                    </div>
+
+                    <!-- Westgate Interactive Propinquity Matrix -->
+                    <div class="lg:col-span-5 bg-stone-900 text-white rounded-xl p-6 shadow-md flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-amber-400 tracking-wider uppercase">Estudo Westgate West (1950)</span>
+                            <h4 class="text-xl font-serif font-bold mt-1 mb-3">O Fenómeno da Propinquidade Arquitetónica</h4>
+                            <p class="text-stone-300 text-xs leading-relaxed mb-4">
+                                Ao investigar veteranos casados do MIT, Festinger, Schachter e Back demonstraram que a amizade não deriva prioritariamente de valores partilhados, mas da <strong>distância física e funcional</strong> induzida pela arquitetura.
+                            </p>
+
+                            <!-- Interactive Propinquity Simulator -->
+                            <div class="bg-stone-800 p-4 rounded-lg space-y-3 border border-stone-700">
+                                <label class="block text-xs font-medium text-stone-300">
+                                    Selecione o Padrão Arquitetónico para Analisar o Impacto Social:
+                                </label>
+                                <select id="propinquity-select" onchange="updatePropinquityView()" class="w-full bg-stone-900 border border-stone-600 rounded px-3 py-2 text-xs text-stone-200 focus:outline-none focus:border-terracotta-600">
+                                    <option value="linear">1. Distância Linear Absoluta (Portas Adjacentes)</option>
+                                    <option value="stairs">2. Distância Funcional (Bases de Escadarias)</option>
+                                    <option value="isolated">3. Isolamento Físico-Funcional (Extremidades do Corredor)</option>
+                                </select>
+
+                                <div id="propinquity-result" class="p-3 bg-stone-900/80 rounded border border-stone-700 text-xs space-y-2">
+                                    <!-- Dynamic text updated via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-stone-800 text-xs text-stone-400 flex justify-between items-center">
+                            <span>Fonte: Social Pressures in Informal Groups (1950)</span>
+                            <span class="text-amber-400 font-mono text-[10px]">Efeito de Mera Exposição</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Propinquity Detail Table -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-sand-200">
+                    <h4 class="text-base font-serif font-bold text-sand-900 mb-4">Métricas de Interação Espacial no Complexo Westgate West</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left text-stone-700">
+                            <thead class="bg-sand-100 text-sand-900 uppercase font-semibold">
+                                <tr>
+                                    <th class="px-4 py-3 rounded-l-lg">Fator Espacial Analisado</th>
+                                    <th class="px-4 py-3">Padrão Comportamental Observado</th>
+                                    <th class="px-4 py-3 rounded-r-lg">Implicação Sociológica Fundamental</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-sand-200">
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-sand-900">Distância Linear Absoluta</td>
+                                    <td class="px-4 py-3">Residentes de apartamentos adjacentes apresentavam probabilidade exponencialmente maior de amizade do que portas separadas por corredores.</td>
+                                    <td class="px-4 py-3">As amizades derivam de exposições repetidas e informais, consolidando a "mera exposição".</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-sand-900">Distância Funcional (Escadas)</td>
+                                    <td class="px-4 py-3">Moradores junto às bases das escadas possuíam taxas de amizade com o andar superior muito superiores aos restantes moradores do rés-do-chão.</td>
+                                    <td class="px-4 py-3">A arquitetura afunila o fluxo de mobilidade, gerando intimidade induzida estruturalmente.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-sand-900">Isolamento Físico-Funcional</td>
+                                    <td class="px-4 py-3">Apartamentos nas extremidades mortas correlacionavam-se com forte marginalização social dos seus habitantes.</td>
+                                    <td class="px-4 py-3">A segregação arquitetónica funciona como um inibidor passivo da difusão de informação e coesão.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- ATO 2: COMPARAÇÃO SOCIAL & CULTO CLARION  -->
+            <!-- ========================================== -->
+            <section id="ato2" class="tab-content hidden space-y-8">
+                <!-- Section Introduction Paragraph -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-amber-600">
+                    <h3 class="text-xl font-serif font-bold text-sand-900 mb-2">Ato II: A Avaliação do Eu e a Dissecação Clandestina da Fé (1951–1956)</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        Este ato explora as duas grandes viragens teóricas de Festinger nos meados da década de 1950. Primeiro, a formulação axiomática da <strong>Teoria da Comparação Social (1954)</strong>, que estabeleceu como os seres humanos usam os seus pares como espelhos para calibrar atitudes e habilidades. Em segundo lugar, a dramática investigação etnográfica clandestina documentada no clássico <em>When Prophecy Fails (1956)</em>, onde psicólogos infiltraram um culto apocalíptico para observar o que acontece quando uma crença absoluta colide com a refutação empírica.
+                    </p>
+                </div>
+
+                <!-- Social Comparison Theory Framework -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-sand-200">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                        <div>
+                            <span class="text-xs font-semibold text-amber-700 tracking-wider uppercase">Universidade do Minnesota • 1954</span>
+                            <h4 class="text-2xl font-serif font-bold text-sand-900">Teoria da Comparação Social: Hipóteses Axiomáticas</h4>
+                        </div>
+                        <span class="text-xs px-3 py-1 bg-amber-100 text-amber-800 rounded-full font-medium mt-2 md:mt-0">
+                            Estrutura Dedutiva Quase-Matemática
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 bg-sand-50 rounded-lg border border-sand-200 hover:border-amber-500 transition">
+                            <div class="text-terracotta-600 font-serif font-bold text-base mb-1">Hipóteses I & II</div>
+                            <div class="text-xs font-semibold text-stone-800 uppercase mb-2">Pulsão de Avaliação & Espelhos</div>
+                            <p class="text-stone-600 text-xs leading-relaxed">
+                                O ser humano possui um impulso inato para avaliar opiniões e aptidões. Na ausência de critérios físicos objetivos, compara-se com outros.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-sand-50 rounded-lg border border-sand-200 hover:border-amber-500 transition">
+                            <div class="text-terracotta-600 font-serif font-bold text-base mb-1">Hipótese III</div>
+                            <div class="text-xs font-semibold text-stone-800 uppercase mb-2">O Princípio da Similaridade</div>
+                            <p class="text-stone-600 text-xs leading-relaxed">
+                                A tendência para a comparação decresce à medida que a discrepância entre o indivíduo e o alvo de comparação aumenta.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-sand-50 rounded-lg border border-sand-200 hover:border-amber-500 transition">
+                            <div class="text-terracotta-600 font-serif font-bold text-base mb-1">Hipóteses IV & V</div>
+                            <div class="text-xs font-semibold text-stone-800 uppercase mb-2">Impulso Ascendente & Limites</div>
+                            <p class="text-stone-600 text-xs leading-relaxed">
+                                Existe um vetor ascendente para capacidades ("ser ligeiramente superior"). No entanto, restrições não sociais impõem limites físicos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cult Studies: When Prophecy Fails -->
+                <div class="bg-stone-900 text-white rounded-xl p-6 shadow-md">
+                    <div class="max-w-3xl mb-6">
+                        <span class="text-xs font-semibold text-terracotta-600 tracking-wider uppercase">Infiltração Clandestina • Chicago 1954</span>
+                        <h4 class="text-2xl font-serif font-bold mt-1">O Caso "When Prophecy Fails" & A Seita de Marian Keech</h4>
+                        <p class="text-stone-300 text-xs leading-relaxed mt-2">
+                            Festinger, Riecken e Schachter infiltraram-se sob disfarce na seita <em>The Seekers</em>, liderada por Dorothy Martin ("Mrs. Marian Keech"), que profetizara um dilúvio global a 21 de dezembro de 1954 e o resgate por uma nave do planeta Clarion.
+                        </p>
+                    </div>
+
+                    <!-- Interactive Timeline of Dec 20-21, 1954 -->
+                    <div class="space-y-3 bg-stone-800 p-4 rounded-lg border border-stone-700">
+                        <h5 class="text-xs font-semibold uppercase text-amber-400">Cronologia Crítica do Colapso e Racionalização:</h5>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+                            <div onclick="showCultDetail('prep')" class="cursor-pointer p-3 bg-stone-900 rounded border border-stone-700 hover:border-amber-400 transition">
+                                <span class="text-amber-400 font-mono font-bold block mb-1">20 Dez (Noite)</span>
+                                <strong class="block text-stone-200">Remoção de Metais</strong>
+                                <p class="text-stone-400 text-[11px]">Fechos, sutiãs e brincos removidos para o embarque iminente.</p>
+                            </div>
+                            <div onclick="showCultDetail('midnight')" class="cursor-pointer p-3 bg-stone-900 rounded border border-stone-700 hover:border-amber-400 transition">
+                                <span class="text-amber-400 font-mono font-bold block mb-1">21 Dez (00:10)</span>
+                                <strong class="block text-stone-200">O Choque Abismal</strong>
+                                <p class="text-stone-400 text-[11px]">O relógio soa meia-noite e dez. Nenhum disco voador surge. Silêncio e choque.</p>
+                            </div>
+                            <div onclick="showCultDetail('epiphany')" class="cursor-pointer p-3 bg-stone-900 rounded border border-stone-700 hover:border-amber-400 transition">
+                                <span class="text-amber-400 font-mono font-bold block mb-1">21 Dez (04:45)</span>
+                                <strong class="block text-stone-200">A Racionalização</strong>
+                                <p class="text-stone-400 text-[11px]">Keech transmite: Deus poupou o mundo graças à luz do pequeno grupo.</p>
+                            </div>
+                            <div onclick="showCultDetail('prosel')" class="cursor-pointer p-3 bg-stone-900 rounded border border-stone-700 hover:border-amber-400 transition">
+                                <span class="text-amber-400 font-mono font-bold block mb-1">21 Dez (Manhã)</span>
+                                <strong class="block text-stone-200">Proselitismo Frenético</strong>
+                                <p class="text-stone-400 text-[11px]">Chamam a imprensa. O grupo necessita de adesão externa para validar a farsa.</p>
+                            </div>
+                        </div>
+
+                        <div id="cult-detail-box" class="p-3 bg-stone-950 rounded border border-amber-900/50 text-xs text-stone-300 italic">
+                            Clique numa das etapas acima para examinar os detalhes metodológicos e psicológicos observados pelos investigadores.
+                        </div>
+                    </div>
+
+                    <!-- 5 Conditions for Belief Maintenance -->
+                    <div class="mt-6 pt-4 border-t border-stone-800">
+                        <h5 class="text-xs font-semibold text-stone-400 uppercase mb-3">As 5 Condições Necessárias para o Aumento do Fervor perante a Refutação:</h5>
+                        <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-[11px] text-stone-300">
+                            <div class="p-2 bg-stone-800/60 rounded">1. Crença profunda mantida com grande convicção.</div>
+                            <div class="p-2 bg-stone-800/60 rounded">2. Ações irrevogáveis executadas (venda de bens, despedimento).</div>
+                            <div class="p-2 bg-stone-800/60 rounded">3. Profecia com detalhe fáctico específico e testável.</div>
+                            <div class="p-2 bg-stone-800/60 rounded">4. Evidência indiscutível de desconfirmação presenciada.</div>
+                            <div class="p-2 bg-stone-800/60 rounded">5. Presença de suporte social grupal crente interconectado.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- ATO 3: A DISSONÂNCIA COGNITIVA ($1 vs $20) -->
+            <!-- ========================================== -->
+            <section id="ato3" class="tab-content hidden space-y-8">
+                <!-- Section Introduction Paragraph -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-terracotta-600">
+                    <h3 class="text-xl font-serif font-bold text-sand-900 mb-2">Ato III: A Revolução da Dissonância Cognitiva e o Experimento dos $1 vs $20 (1957–1959)</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        Este ato foca-se no coração da obra de Festinger: o lançamento da publicação seminal <em>A Theory of Cognitive Dissonance (1957)</em> na Universidade de Stanford e a sua lendária experiência com Merrill Carlsmith em 1959. Descubra a matemática do desconforto psicológico e explore o gráfico interativo e o simulador experimental que provaram que recompensas monetárias irrisórias geram transformações de atitude muito mais profundas do que grandes subornos.
+                    </p>
+                </div>
+
+                <!-- Mathematical Formula Interactive Section -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-sand-200">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-6">
+                        <div class="space-y-1">
+                            <span class="text-xs font-semibold text-terracotta-600 uppercase tracking-wider">Mecanismo Matemático de Festinger</span>
+                            <h4 class="text-2xl font-serif font-bold text-sand-900">A Magnitude da Dissonância Cognitiva</h4>
+                            <p class="text-stone-600 text-xs">
+                                A tensão sentida é uma relação escalar direta entre o peso das cognições divergentes e consoantes.
+                            </p>
+                        </div>
+
+                        <!-- Interactive Formula Calculator -->
+                        <div class="w-full lg:w-auto bg-sand-100 p-4 rounded-xl border border-sand-300">
+                            <div class="text-xs font-bold text-stone-700 mb-2 text-center">Simulador de Tensão Psíquica</div>
+                            <div class="flex items-center gap-3 font-mono text-xs sm:text-sm">
+                                <span class="font-bold text-sand-900">Dissonância =</span>
+                                <div class="flex flex-col items-center">
+                                    <span id="formula-num-display" class="border-b border-sand-900 px-2 text-terracotta-600 font-bold">5 Dissonantes</span>
+                                    <span id="formula-den-display" class="px-2 text-sage-700">5 Diss + 5 Cons</span>
+                                </div>
+                                <span class="font-bold text-sand-900">=</span>
+                                <span id="formula-result" class="text-xl font-bold font-serif text-terracotta-600">0.50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formula Control Sliders -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-sand-50 p-4 rounded-lg border border-sand-200">
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-700 mb-1 flex justify-between">
+                                <span>Cognições Dissonantes (Conflitos / Culpa):</span>
+                                <span id="val-diss" class="text-terracotta-600 font-bold">5</span>
+                            </label>
+                            <input type="range" id="slider-diss" min="1" max="10" value="5" oninput="updateDissonanceFormula()" class="w-full accent-terracotta-600">
+                            <p class="text-[11px] text-stone-500 mt-1">Exemplo: "Sei que fumar causa cancro", "Menti a um colega".</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-700 mb-1 flex justify-between">
+                                <span>Cognições Consonantes (Justificações / Recompensas):</span>
+                                <span id="val-cons" class="text-sage-700 font-bold">5</span>
+                            </label>
+                            <input type="range" id="slider-cons" min="1" max="10" value="5" oninput="updateDissonanceFormula()" class="w-full accent-sage-700">
+                            <p class="text-[11px] text-stone-500 mt-1">Exemplo: "Pagaram-me $20", "Todos os meus tios fumaram até aos 90".</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classic Experiment: Forced Compliance $1 vs $20 -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Text & Context -->
+                    <div class="lg:col-span-6 bg-white rounded-xl p-6 shadow-sm border border-sand-200 space-y-4">
+                        <span class="text-xs font-semibold text-terracotta-600 uppercase tracking-wider">Festinger & Carlsmith (1959)</span>
+                        <h4 class="text-2xl font-serif font-bold text-sand-900">O Paradigma da Submissão Induzida</h4>
+                        <p class="text-stone-700 text-sm leading-relaxed">
+                            Para desacreditar o behaviorismo de Skinner (que defendia que maiores recompensas geram maior mudança de atitude), 71 alunos masculinos de Stanford realizaram tarefas intencionalmente aborrecidas durante 1 hora (virar carretéis e pinos de madeira num prato oco).
+                        </p>
+                        <p class="text-stone-700 text-sm leading-relaxed">
+                            Posteriormente, pediu-se-lhes para mentir a um participante ingénuo na sala de espera, afirmando que a tarefa era "fascinante e entusiasmante". Foram pagos <strong>$1</strong> (justificação externa fraca) ou <strong>$20</strong> (justificação externa forte).
+                        </p>
+
+                        <div class="p-3 bg-amber-50 rounded border border-amber-200 text-xs text-amber-900">
+                            <strong>Resultado Revolucionário:</strong> Quem recebeu apenas $1 experienciou forte dissonância ("Menti por uma ninharia"). Para aliviar a dor moral, autoconvenceu-se de que a tarefa tinha sido genuinamente divertida!
+                        </div>
+                    </div>
+
+                    <!-- Chart Container -->
+                    <div class="lg:col-span-6 bg-white rounded-xl p-6 shadow-sm border border-sand-200 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-base font-serif font-bold text-sand-900 mb-1">Avaliação Hedónica Subjetiva da Tarefa</h4>
+                            <p class="text-stone-500 text-xs mb-4">Pontuação média de desfrute numa escala de −5.00 a +5.00</p>
+                            
+                            <div class="chart-container">
+                                <canvas id="experimentChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="text-[11px] text-stone-500 text-center mt-2 italic">
+                            Dados originais do estudo Cognitive Consequences of Forced Compliance (1959).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- ATO 4: NEUROBIOLOGIA & IMPACTO MODERNO     -->
+            <!-- ========================================== -->
+            <section id="ato4" class="tab-content hidden space-y-8">
+                <!-- Section Introduction Paragraph -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-sage-700">
+                    <h3 class="text-xl font-serif font-bold text-sand-900 mb-2">Ato IV: As Assinaturas Neurais e as Ressonâncias Contemporâneas</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        Este ato estabelece a ponte entre as descobertas laboratoriais de meados do século XX e a ciência moderna. Descubra a neurobiologia da dissonância revelada por fMRI no córtex cerebral e veja como os princípios de Festinger são aplicados hoje na Economia Comportamental (Prémio Nobel George Akerlof), nas redes sociais (câmaras de eco e bolhas de filtro) e no estudo da paralisia cívica perante o negacionismo climático.
+                    </p>
+                </div>
+
+                <!-- fMRI Neuroscience Hotspot Display -->
+                <div class="bg-stone-900 text-white rounded-xl p-6 shadow-md">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <div>
+                            <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Nature Neuroscience (2009) • van Veen et al.</span>
+                            <h4 class="text-2xl font-serif font-bold mt-1">A Assinatura Neural da Dissonância Cognitiva</h4>
+                        </div>
+                        <span class="text-xs px-3 py-1 bg-emerald-900 text-emerald-200 rounded-full font-mono mt-2 md:mt-0">
+                            Mapeamento fMRI
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <!-- Brain Area Styled Mockup -->
+                        <div class="bg-stone-800 p-6 rounded-xl border border-stone-700 relative text-center space-y-4">
+                            <div class="text-stone-400 text-xs font-mono uppercase">Topografia do Córtex Humano</div>
+                            
+                            <!-- Neural Hotspots -->
+                            <div class="flex justify-center gap-4 py-4">
+                                <button onclick="selectBrainRegion('dacc')" id="btn-dacc" class="px-4 py-3 bg-terracotta-600 hover:bg-terracotta-700 text-white rounded-lg text-xs font-bold transition shadow-lg ring-2 ring-amber-400">
+                                    🧠 dACC (Córtex Cingulado Anterior Dorsal)
+                                </button>
+                                <button onclick="selectBrainRegion('insula')" id="btn-insula" class="px-4 py-3 bg-sage-700 hover:bg-sage-800 text-white rounded-lg text-xs font-bold transition shadow-lg">
+                                    ⚡ Ínsula Anterior
+                                </button>
+                            </div>
+
+                            <p class="text-stone-400 text-[11px] italic">
+                                Clique numa região do cérebro para inspecionar a sua função durante a angústia de inconsistência moral.
+                            </p>
+                        </div>
+
+                        <!-- Hotspot Description Box -->
+                        <div id="brain-info-box" class="p-5 bg-stone-950 rounded-xl border border-stone-800 text-xs space-y-3">
+                            <div class="text-amber-400 font-bold font-serif text-sm">dACC (Córtex Cingulado Anterior Dorsal)</div>
+                            <p class="text-stone-300 leading-relaxed">
+                                Estrutura crítica ativada massivamente durante tarefas de inconsistência atitudinal no scanner fMRI. Atua como o alarme visceral de conflito do cérebro, prevendo milimetricamente o grau posterior de racionalização do indivíduo.
+                            </p>
+                            <span class="inline-block text-[10px] text-stone-500 font-mono">Deteção de Conflitos e Regulação Emocional Aversiva</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modern Resonances Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Economics -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-sand-200 space-y-3">
+                        <span class="text-xs font-semibold text-terracotta-600 uppercase">Economia Comportamental</span>
+                        <h4 class="text-base font-serif font-bold text-sand-900">George Akerlof & O Risco Ocupacional</h4>
+                        <p class="text-stone-600 text-xs leading-relaxed">
+                            O Prémio Nobel incorporou a dissonância nas curvas de utilidade. Trabalhadores em setores letais (minas, radiação) minimizam ativamente os dados de mortalidade e recusam equipamentos de proteção para suportar o medo diário.
+                        </p>
+                    </div>
+
+                    <!-- Digital Algorithms -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-sand-200 space-y-3">
+                        <span class="text-xs font-semibold text-amber-600 uppercase">Redes Sociais & Algoritmos</span>
+                        <h4 class="text-base font-serif font-bold text-sand-900">Câmaras de Eco & Bolhas de Filtro</h4>
+                        <p class="text-stone-600 text-xs leading-relaxed">
+                            Os algoritmos capitalizam a repulsa humana perante opiniões contraditórias. A personalização implícita cria "bolhas herméticas" que protegem o utilizador da dor do confronto com factos opostos.
+                        </p>
+                    </div>
+
+                    <!-- Climate Denial -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-sand-200 space-y-3">
+                        <span class="text-xs font-semibold text-sage-700 uppercase">Sociologia Ambiental</span>
+                        <h4 class="text-base font-serif font-bold text-sand-900">Negação Climática Organizada</h4>
+                        <p class="text-stone-600 text-xs leading-relaxed">
+                            Estudada por Kari Norgaard. Cidadãos informados experienciam angústia entre a consciência ecológica e o seu estilo de vida fóssil. A mente responde com apatia e racionalizações atenuantes ("O meu impacto é nulo").
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- ATO 5: O ÊXODO TEÓRICO & "HUMAN LEGACY"    -->
+            <!-- ========================================== -->
+            <section id="ato5" class="tab-content hidden space-y-8">
+                <!-- Section Introduction Paragraph -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-stone-700">
+                    <h3 class="text-xl font-serif font-bold text-sand-900 mb-2">Ato V: O Êxodo Abrupto e a Arqueologia do Futuro (1964–1989)</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        Este ato final narra a decisão mais surpreendente e audaciosa da carreira de Festinger: o abandono total da psicologia social em 1964, no cume do seu prestígio. Descubra a sua transição para a neurociência da visão oculomotora, a transferência para a <em>New School for Social Research</em> em Nova Iorque e a sua obra testamentária, <em>The Human Legacy (1983)</em>, uma reflexão antropológica e evolutiva sobre as armadilhas do raciocínio humano.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-8 bg-white rounded-xl p-6 shadow-sm border border-sand-200 space-y-4">
+                        <span class="text-xs font-semibold text-stone-500 uppercase tracking-wider">1964 • Rutura Catedrática em Stanford</span>
+                        <h4 class="text-2xl font-serif font-bold text-sand-900">O Abandono da Psicologia Social</h4>
+                        <p class="text-stone-700 text-sm leading-relaxed">
+                            Em 1964, no auge absoluto da sua fama e influência, Festinger anunciou que iria parar de investigar em psicologia social. Sentia-se desencantado com o rumo da disciplina, que considerava enclausurada em minúcias puritanas e problemas técnicos cada vez mais estreitos, perdendo de vista as grandes questões humanas.
+                        </p>
+                        <p class="text-stone-700 text-sm leading-relaxed">
+                            Redirecionou todas as suas energias para o estudo fisiológico da perceção visual e dos movimentos oculomotores. Em 1968 regressou a Nova Iorque, assumindo a cátedra na <em>The New School for Social Research</em>. Fechou definitivamente os seus laboratórios de ótica em 1979 para dedicar a última década da sua vida à Antropologia Evolutiva e à História Civilizacional.
+                        </p>
+
+                        <!-- Final Legacy Summary Card -->
+                        <div class="bg-sand-100 p-4 rounded-xl border border-sand-300 mt-4 space-y-2">
+                            <h5 class="text-xs font-bold text-sand-900 uppercase font-serif">O Livro Derradeiro: "The Human Legacy" (1983)</h5>
+                            <p class="text-stone-700 text-xs leading-relaxed">
+                                Festinger dissecou como a capacidade humana para resolver problemas pragmáticos e criar ferramentas tecnológicas gera inadvertidamente novos perigos e armadilhas ambientais numa escala sem precedentes. A mente humana, desenhada para curtos horizontes de sobrevivência, recorre repetidamente à ilusão e ao autoengano para ignorar as catástrofes de longo prazo que ela própria cria.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Death & Epilogue Card -->
+                    <div class="lg:col-span-4 bg-stone-900 text-white rounded-xl p-6 shadow-md flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider">11 de Fevereiro de 1989</span>
+                            <h4 class="text-xl font-serif font-bold">A Finitude de um Visionário</h4>
+                            <p class="text-stone-300 text-xs leading-relaxed">
+                                Leon Festinger faleceu em Nova Iorque aos 69 anos, vítima de cancro hepático, ao lado da sua esposa Trudy Bradley.
+                            </p>
+                            <div class="p-3 bg-stone-800 rounded border border-stone-700 text-xs text-stone-300 italic">
+                                "A capacidade primária que garantiu o triunfo humano não residiu nas vias analíticas perfeitas, mas na plasticidade do ego em contar a si próprio as ficções curativas indispensáveis para reanimar a chama do eu."
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-stone-800 text-[11px] text-stone-400">
+                            Legado: Inúmeras citações nas ciências sociais, economia e inteligência artificial.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SEÇÃO EXTRA: LABORATÓRIO INTERATIVO       -->
+            <!-- ========================================== -->
+            <section id="lab" class="tab-content hidden space-y-8">
+                <!-- Section Introduction Paragraph -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-emerald-600">
+                    <h3 class="text-xl font-serif font-bold text-sand-900 mb-2">🔬 Laboratório de Experimentação Psicológica em Tempo Real</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        Bem-vindo ao centro experimental interativo. Aqui pode simular diretamente o histórico estudo dos $1 vs $20 de 1959, vivenciando o papel de um participante de Stanford, ou testar os seus próprios dilemas quotidianos no nosso diagnóstico de dissonância interpessoal.
+                    </p>
+                </div>
+
+                <!-- Interactive Experiment Simulator: $1 vs $20 -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-sand-200 space-y-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                        <div>
+                            <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Simulador de Experimento Histórico</span>
+                            <h4 class="text-2xl font-serif font-bold text-sand-900">Vivencie o Teste dos Pinos de Madeira (1959)</h4>
+                        </div>
+                        <span id="sim-status" class="text-xs px-3 py-1 bg-sand-200 text-sand-800 rounded-full font-mono mt-2 md:mt-0">
+                            Etapa 1: A Tarefa Monótona
+                        </span>
+                    </div>
+
+                    <!-- Simulator Canvas / UI -->
+                    <div id="sim-body" class="bg-sand-50 p-6 rounded-xl border border-sand-200 space-y-4">
+                        <div id="sim-step-1" class="space-y-4">
+                            <p class="text-stone-700 text-sm">
+                                ⏱ <strong>Exercício em curso:</strong> Está há 45 minutos a rodar sistematicamente 48 pinos de madeira num tabuleiro oco, um quarto de volta de cada vez. A tarefa é visceralmente aborrecida, repetitiva e sem propósito.
+                            </p>
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-lg border border-sand-300">
+                                <div class="text-3xl">⚙️</div>
+                                <div class="flex-1">
+                                    <div class="text-xs font-bold text-stone-800">Contador de Rotações de Pinos</div>
+                                    <div class="w-full bg-sand-200 h-2 rounded-full overflow-hidden mt-1">
+                                        <div class="bg-terracotta-600 h-full w-full animate-pulse"></div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-mono font-bold text-terracotta-600">Nível de Tédio: 98%</span>
+                            </div>
+                            <button onclick="nextSimStep(2)" class="w-full py-3 bg-stone-900 hover:bg-stone-800 text-white rounded-lg text-xs font-bold uppercase tracking-wider transition">
+                                Concluir a Hora de Trabalho Monótono ➔
+                            </button>
+                        </div>
+
+                        <div id="sim-step-2" class="hidden space-y-4">
+                            <p class="text-stone-700 text-sm">
+                                🤝 O investigador aproxima-se confidencialmente e diz que o seu assistente faltou. Pede-lhe um favor urgente: ir à sala de espera e convencer a próxima estudante de que <strong>a experiência é incrivelmente divertida e cativante</strong>.
+                            </p>
+                            <div class="text-xs font-bold text-stone-800 mb-2">Escolha a sua Condição Experimental:</div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <button onclick="runExperimentChoice(1)" class="p-4 bg-white border-2 border-emerald-600 hover:bg-emerald-50 rounded-xl text-left space-y-1 transition">
+                                    <div class="font-bold text-emerald-800 text-sm">Aceitar a Oferta de $1 dólar</div>
+                                    <div class="text-stone-500 text-xs">Apenas uma nota irrisória de recompensa.</div>
+                                </button>
+                                <button onclick="runExperimentChoice(20)" class="p-4 bg-white border-2 border-stone-300 hover:bg-sand-100 rounded-xl text-left space-y-1 transition">
+                                    <div class="font-bold text-stone-800 text-sm">Aceitar a Oferta de $20 dólares</div>
+                                    <div class="text-stone-500 text-xs">Uma quantia substancial (equivalente a suborno alto).</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="sim-step-3" class="hidden space-y-4">
+                            <div class="p-4 bg-white rounded-xl border border-sand-300 space-y-3">
+                                <div id="sim-outcome-title" class="text-base font-serif font-bold text-sand-900"></div>
+                                <div id="sim-outcome-text" class="text-xs text-stone-700 leading-relaxed"></div>
+                                <div id="sim-outcome-brain" class="p-3 bg-sand-100 rounded text-xs italic text-stone-800"></div>
+                            </div>
+                            <button onclick="resetSim()" class="px-4 py-2 bg-stone-200 hover:bg-sand-300 text-stone-800 rounded-lg text-xs font-semibold transition">
+                                🔄 Reiniciar Simulação
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Documentary Footer -->
+    <footer class="bg-stone-900 text-stone-400 text-xs py-8 border-t border-stone-800 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <span class="font-serif font-bold text-stone-200 text-sm">Leon Festinger (1919–1989)</span>
+                <p class="text-stone-500 text-[11px] mt-0.5">Aplicação Web baseada no Relatório de Investigação da Teoria da Dissonância e Comparação Social.</p>
+            </div>
+            <div class="text-center md:text-right text-[11px] text-stone-500">
+                Desenvolvido sem recurso a gráficos SVG ou Mermaid JS • Renderização pura via Chart.js & Tailwind CSS
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Global Chart Variable
+        let experimentChart = null;
+
+        // On DOM Load
+        document.addEventListener("DOMContentLoaded", function() {
+            initExperimentChart();
+            updatePropinquityView();
+            updateDissonanceFormula();
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.add('hidden'));
+
+            // Show current tab
+            const target = document.getElementById(tabId);
+            if(target) target.classList.remove('hidden');
+
+            // Update nav button styles
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                btn.classList.remove('bg-sand-200/60', 'text-terracotta-600', 'font-semibold');
+                btn.classList.add('text-stone-600');
+            });
+
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if(activeBtn && tabId !== 'lab') {
+                activeBtn.classList.add('bg-sand-200/60', 'text-terracotta-600', 'font-semibold');
+            }
+
+            // Scroll smoothly to top of tab container
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Quick Search concept switcher
+        function quickSearch(concept) {
+            if(concept === 'propinquidade') {
+                switchTab('ato1');
+            } else if(concept === 'comparacao' || concept === 'clarion') {
+                switchTab('ato2');
+            } else if(concept === 'submissao') {
+                switchTab('ato3');
+            } else if(concept === 'fmri') {
+                switchTab('ato4');
+            }
+        }
+
+        // Propinquity View Dynamic Text
+        function updatePropinquityView() {
+            const val = document.getElementById('propinquity-select').value;
+            const res = document.getElementById('propinquity-result');
+
+            if(val === 'linear') {
+                res.innerHTML = `
+                    <strong class="text-amber-400 block mb-1">Proximidade Física Adjacente:</strong>
+                    <p class="text-stone-300">Morar na porta exatamente ao lado aumentava em 41% a probabilidade de desenvolver laços profundos de amizade em relação a portas separadas por apenas 4 apartamentos.</p>
+                `;
+            } else if(val === 'stairs') {
+                res.innerHTML = `
+                    <strong class="text-amber-400 block mb-1">Efeito de Funil da Escadaria:</strong>
+                    <p class="text-stone-300">Os residentes do rés-do-chão cujas portas ficavam imediatamente junto à base das escadas tinham mais amizades com o andar superior do que qualquer outro morador do piso térreo.</p>
+                `;
+            } else if(val === 'isolated') {
+                res.innerHTML = `
+                    <strong class="text-amber-400 block mb-1">Marginalização Arquitetónica:</strong>
+                    <p class="text-stone-300">Apartamentos virados para o exterior ou no fim cego dos corredores apresentavam isolamento social crónico, demonstrando que a arquitetura prevalece sobre a extroversão pessoal.</p>
+                `;
+            }
+        }
+
+        // Cult Detail Switcher
+        function showCultDetail(type) {
+            const box = document.getElementById('cult-detail-box');
+            if(type === 'prep') {
+                box.innerHTML = "<strong>Fase de Preparação:</strong> O grupo isolou-se do público, recusou entrevistas e focou-se em rituais obsessivos de purificação, abandonando bens e empregos.";
+            } else if(type === 'midnight') {
+                box.innerHTML = "<strong>O Ponto de Ruptura (00:10):</strong> Ao perceberem que nenhuma nave surgiu, instalou-se uma desorientação catatónica. Vários crentes choraram em silêncio absoluto durante horas.";
+            } else if(type === 'epiphany') {
+                box.innerHTML = "<strong>A Epifania Racionalizadora (04:45):</strong> Marian Keech começou a psicografar que a fé do grupo emitira tanta luz que Deus salvou o planeta do cataclismo.";
+            } else if(type === 'prosel') {
+                box.innerHTML = "<strong>Inversão Comportamental:</strong> Do isolamento anterior, o grupo passou ao contacto frenético com jornais. A busca por novos crentes visava revalidar a crença abalada.";
+            }
+        }
+
+        // Dissonance Formula Dynamic Calculator
+        function updateDissonanceFormula() {
+            const diss = parseInt(document.getElementById('slider-diss').value);
+            const cons = parseInt(document.getElementById('slider-cons').value);
+
+            document.getElementById('val-diss').innerText = diss;
+            document.getElementById('val-cons').innerText = cons;
+
+            document.getElementById('formula-num-display').innerText = `${diss} Dissonantes`;
+            document.getElementById('formula-den-display').innerText = `${diss} Diss + ${cons} Cons`;
+
+            const ratio = (diss / (diss + cons)).toFixed(2);
+            const resultElem = document.getElementById('formula-result');
+            resultElem.innerText = ratio;
+
+            if(ratio > 0.65) {
+                resultElem.className = "text-xl font-bold font-serif text-terracotta-600 animate-pulse";
+            } else {
+                resultElem.className = "text-xl font-bold font-serif text-sage-700";
+            }
+        }
+
+        // Chart.js Setup for $1 vs $20 Experiment
+        function initExperimentChart() {
+            const ctx = document.getElementById('experimentChart').getContext('2d');
+            
+            experimentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Controlo (Sem Mentira)', 'Grupo $20 Dólares', 'Grupo $1 Dólar'],
+                    datasets: [{
+                        label: 'Avaliação da Tarefa (−5 a +5)',
+                        data: [-0.45, -0.05, 1.35],
+                        backgroundColor: [
+                            'rgba(120, 113, 108, 0.7)',
+                            'rgba(194, 65, 12, 0.7)',
+                            'rgba(46, 90, 68, 0.85)'
+                        ],
+                        borderColor: [
+                            'rgb(120, 113, 108)',
+                            'rgb(194, 65, 12)',
+                            'rgb(46, 90, 68)'
+                        ],
+                        borderWidth: 1.5,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: -1.5,
+                            max: 2.0,
+                            ticks: {
+                                color: '#44403c',
+                                font: { size: 11 }
+                            },
+                            grid: {
+                                color: '#e7e5e4'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#1c1917',
+                                font: { size: 11, weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` Pontuação Médica Subjetiva: ${context.parsed.y}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Brain Hotspot Selector Logic
+        function selectBrainRegion(region) {
+            const box = document.getElementById('brain-info-box');
+            const btnDacc = document.getElementById('btn-dacc');
+            const btnInsula = document.getElementById('btn-insula');
+
+            if(region === 'dacc') {
+                btnDacc.className = "px-4 py-3 bg-terracotta-600 text-white rounded-lg text-xs font-bold transition shadow-lg ring-2 ring-amber-400";
+                btnInsula.className = "px-4 py-3 bg-stone-800 text-stone-300 hover:bg-stone-700 rounded-lg text-xs font-bold transition";
+                
+                box.innerHTML = `
+                    <div class="text-amber-400 font-bold font-serif text-sm">dACC (Córtex Cingulado Anterior Dorsal)</div>
+                    <p class="text-stone-300 leading-relaxed">
+                        Estrutura crítica ativada massivamente durante tarefas de inconsistência atitudinal no scanner fMRI. Atua como o alarme visceral de conflito do cérebro, prevendo milimetricamente o grau posterior de racionalização do indivíduo.
+                    </p>
+                    <span class="inline-block text-[10px] text-stone-500 font-mono">Deteção de Conflitos e Regulação Emocional Aversiva</span>
+                `;
+            } else if(region === 'insula') {
+                btnInsula.className = "px-4 py-3 bg-sage-700 text-white rounded-lg text-xs font-bold transition shadow-lg ring-2 ring-emerald-400";
+                btnDacc.className = "px-4 py-3 bg-stone-800 text-stone-300 hover:bg-stone-700 rounded-lg text-xs font-bold transition";
+
+                box.innerHTML = `
+                    <div class="text-emerald-400 font-bold font-serif text-sm">Ínsula Anterior</div>
+                    <p class="text-stone-300 leading-relaxed">
+                        Mapeia as respostas somáticas adversas e o desconforto visceral. A sua coativação com o dACC prova que a dissonância cognitiva não é um mero cálculo abstrato, mas uma dor aversiva orgânica equivalente à dor física.
+                    </p>
+                    <span class="inline-block text-[10px] text-stone-500 font-mono">Sinalização de Repulsa Visceral e Arousal Autonómico</span>
+                `;
+            }
+        }
+
+        // Interactive Simulator Logic for $1 vs $20
+        function nextSimStep(step) {
+            if(step === 2) {
+                document.getElementById('sim-step-1').classList.add('hidden');
+                document.getElementById('sim-step-2').classList.remove('hidden');
+                document.getElementById('sim-status').innerText = "Etapa 2: A Indução da Mentira";
+            }
+        }
+
+        function runExperimentChoice(amount) {
+            document.getElementById('sim-step-2').classList.add('hidden');
+            document.getElementById('sim-step-3').classList.remove('hidden');
+            document.getElementById('sim-status').innerText = "Etapa 3: Resultado Psicológico";
+
+            const title = document.getElementById('sim-outcome-title');
+            const text = document.getElementById('sim-outcome-text');
+            const brain = document.getElementById('sim-outcome-brain');
+
+            if(amount === 20) {
+                title.innerText = "Escolheu receber $20 dólares (Justificação Forte)";
+                title.className = "text-base font-serif font-bold text-stone-900";
+                text.innerHTML = "Menti à estudante dizendo que o teste era divertido. No entanto, $20 é uma quantia enorme! O meu cérebro justifica a mentira facilmente: <em>'Menti apenas porque me pagaram muito bem'</em>. A minha opinião real sobre a tarefa permanece intacta: foi um aborrecimento mortal (−0.05).";
+                brain.innerText = "💡 Sinal no dACC reduzido: A recompensa financeira extinguiu a necessidade de alterar a crença pessoal.";
+            } else {
+                title.innerText = "Escolheu receber $1 dólar (Dissonância Máxima!)";
+                title.className = "text-base font-serif font-bold text-terracotta-600";
+                text.innerHTML = "Menti à estudante por apenas $1! A minha mente entra em conflito moral: <em>'Sou uma pessoa honesta. Não mentiria por um reles dólar!'</em>. Para resolver este atrito insuportável, o meu cérebro altera a perceção da tarefa: <em>'Pensando bem, virar os pinos até teve o seu charme e graça!'</em> (+1.35).";
+                brain.innerText = "⚡ Ativação intensa do dACC e da Ínsula Anterior: A mente reescreveu a memória hedónica para salvaguardar a autoimagem!";
+            }
+        }
+
+        function resetSim() {
+            document.getElementById('sim-step-3').classList.add('hidden');
+            document.getElementById('sim-step-1').classList.remove('hidden');
+            document.getElementById('sim-status').innerText = "Etapa 1: A Tarefa Monótona";
+        }
+    </script>
+</body>
+</html>
